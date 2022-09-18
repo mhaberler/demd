@@ -1,6 +1,7 @@
 EXEC := demd
-CC := g++
-LDFLAGS ?=
+CC := g++ 
+LDFLAGS ?= -g
+DEBUG= -g
 LIBS ?= -lgdal -levent -ljson-c
 SRCS := $(wildcard *.cpp)
 # Objs are all the sources, with .cpp replaced by .o
@@ -22,7 +23,7 @@ $(EXEC): $(OBJS)
 	$(CC) -o $@ $(strip $(CFLAGS) )$^ $(strip $(LDFLAGS) $(LIBS))
 
 %.o: %.cpp
-	$(CC) -o $@ $(strip $(CFLAGS) $(INCLUDES) )-c $<
+	$(CC) $(DEBUG) -o $@ $(strip $(CFLAGS) $(INCLUDES) )-c $<
 
 serve: $(EXEC) $(HGT)
 	./$(EXEC) -p $(PORT) $(DEM)

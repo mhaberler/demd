@@ -67,9 +67,10 @@ void elevation_request_cb(struct evhttp_request *req, void *arg) {
     json_tokener_error err;
     json = json_tokener_parse_verbose(data, &err);
     if (!json) {
-        fprintf(stderr, "Failed to parse input buffer: %s\n", json_tokener_error_desc(err));
+        fprintf(stderr, "Failed to parse input buffer: %s, data='%.*s'\n", json_tokener_error_desc(err), len, data);
         goto err;
     }
+
     
     if (!json_object_is_type(json, json_type_array)) {
         evhttp_send_error(req, 400, NULL);
@@ -129,7 +130,8 @@ void elevation_request_cb(struct evhttp_request *req, void *arg) {
             sec--;
         }
         if (verbose)
-            fprintf(stderr, "Lookup %d point(s) in %ld.%06ld sec\n", n, sec, usec);
+            fprintf(stderr, "Lookup %d point(s) in %ld.%06ld sec, data='%.*s' result='%.*s'\n", 
+                n, sec, usec, len, data, strlen(string), string);
     }
     evhttp_add_header(evhttp_request_get_output_headers(req), "Content-Type", contentType);
     evhttp_send_reply(req, 200, "OK", output);
