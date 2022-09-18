@@ -29,6 +29,7 @@ static const int defaultPort = 80;
 static const char *defaultSRS = "WGS84";
 static const char *defaultURI = "/v1/elevations";
 static const char *defaultAuth = "";
+bool verbose = false;
 
 int main(int argc, char **argv) {
     struct context *ctx = NULL;
@@ -42,13 +43,14 @@ int main(int argc, char **argv) {
     const char *uri = defaultURI;
     const char *auth = defaultAuth;
 
-    while ((opt = getopt(argc, argv, "a:p:u:s:A:")) != -1) {
+    while ((opt = getopt(argc, argv, "a:p:u:s:A:v")) != -1) {
 		switch (opt) {
 			case 'a': addr = optarg; break;
 			case 'p': port = atoi(optarg); break;
 			case 'u': uri = optarg; break;
 			case 's': srs = optarg; break;
 			case 'A': auth = optarg; break;
+			case 'v': verbose = true; break;
 			default : fprintf(stderr, "Unknown option %c\n", opt); break;
 		}
 	}

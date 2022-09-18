@@ -12,6 +12,7 @@
 #include "elevation.h"
 
 static const char *contentType = "application/json; charset=utf-8";
+extern bool verbose;
 
 void elevation_request_cb(struct evhttp_request *req, void *arg) {
     context *ctx = (context *)arg;
@@ -127,7 +128,8 @@ void elevation_request_cb(struct evhttp_request *req, void *arg) {
             usec += 1000000;
             sec--;
         }
-        fprintf(stderr, "Lookup %d point(s) in %ld.%06ld sec\n", n, sec, usec);
+        if (verbose)
+            fprintf(stderr, "Lookup %d point(s) in %ld.%06ld sec\n", n, sec, usec);
     }
     evhttp_add_header(evhttp_request_get_output_headers(req), "Content-Type", contentType);
     evhttp_send_reply(req, 200, "OK", output);
