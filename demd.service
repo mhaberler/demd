@@ -1,0 +1,14 @@
+[Unit]
+Description=DEM daemon
+After=network.target
+
+[Service]
+Type=simple
+User=mah
+Group=mah
+WorkingDirectory=/srv/data/dem
+ExecStart=/home/mah/src/demd/demd -p 9000 /srv/data/dem/
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
