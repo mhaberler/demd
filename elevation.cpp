@@ -14,6 +14,13 @@
 static const char *contentType = "application/json; charset=utf-8";
 extern bool verbose;
 
+// https://stackoverflow.com/questions/56835876/number-of-decimals-of-a-double-in-json-c-json-h
+struct json_object* json_object_new_double_fmt(double d, const char *fmt) {
+    char tmp[128];
+    snprintf(tmp, 128, fmt, d);
+    return(json_object_new_double_s(d, tmp));
+}
+
 void elevation_request_cb(struct evhttp_request *req, void *arg) {
     context *ctx = (context *)arg;
     char *data = NULL;
@@ -112,7 +119,8 @@ void elevation_request_cb(struct evhttp_request *req, void *arg) {
             double alt = ContextGetAltitude(ctx, xVal, yVal);
             json_object *val = NULL;
             if (!isnan(alt)) {
-                val = json_object_new_double(alt);
+                val =  json_object_new_double_fmt(alt, "%0.3f");
+                // val = json_object_new_double(alt);
             }
             json_object_array_add(result, val);
         }
